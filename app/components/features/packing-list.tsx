@@ -66,17 +66,19 @@ export const PackingList = ({ items, planId }: PackingListProps) => {
 	return (
 		<div>
 			<div className="flex justify-between items-center mb-4">
-				<h2 className="text-xl font-semibold text-gray-900">Packing List</h2>
+				<h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+					Packing List
+				</h2>
 				<Button onClick={handleAdd} size="sm">
 					<Plus className="w-4 h-4" />
 					Add Item
 				</Button>
 			</div>
 
-			<div className="mb-6 bg-blue-50 p-4 rounded-lg">
+			<div className="mb-6 bg-gray-100 dark:bg-gray-800 dark:border-gray-700 border-1 p-4 rounded-lg">
 				<div className="flex justify-between items-center mb-2">
-					<p className="text-sm text-gray-600">Progress</p>
-					<p className="text-sm font-semibold text-gray-700">
+					<p className="text-sm text-gray-600 dark:text-gray-400">Progress</p>
+					<p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
 						{packedCount} / {totalCount} items packed
 					</p>
 				</div>
@@ -126,7 +128,7 @@ export const PackingList = ({ items, planId }: PackingListProps) => {
 									onChange={(e) =>
 										handleUpdate(item.id, "category", e.target.value)
 									}
-									className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+									className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
 								>
 									<option value="CLOTHING">Clothing</option>
 									<option value="TOILETRIES">Toiletries</option>

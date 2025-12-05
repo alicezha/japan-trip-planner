@@ -9,6 +9,16 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { prisma } from "~/lib/db.server";
 import { exportToCSV } from "~/lib/export";
 
+export function meta() {
+	return [
+		{ title: "Japan Trip Planner" },
+		{
+			name: "description",
+			content: "Plan your perfect journey to the Land of the Rising Sun",
+		},
+	];
+}
+
 export async function loader() {
 	// Get or create a default plan
 	let plan = await prisma.plan.findFirst({
@@ -22,7 +32,7 @@ export async function loader() {
 	const [itineraryItems, budgetItems, packingItems] = await Promise.all([
 		prisma.itineraryItem.findMany({
 			where: { planId: plan.id },
-			orderBy: { date: "asc" },
+			orderBy: { datetime: "asc" },
 		}),
 		prisma.budgetItem.findMany({
 			where: { planId: plan.id },
@@ -54,7 +64,7 @@ const Home = () => {
 			exportToCSV(
 				itineraryItems as unknown as Record<string, unknown>[],
 				"itinerary.csv",
-				["date", "city", "activity", "description"],
+				["datetime", "city", "activity", "description"],
 			);
 		} else if (activeTab === "budget") {
 			exportToCSV(
@@ -78,17 +88,17 @@ const Home = () => {
 	];
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-orange-50">
+		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
 			<div className="max-w-7xl mx-auto p-6">
 				{/* Header */}
 				<div className="mb-8">
 					<div className="flex items-center gap-3 mb-2">
-						<Plane className="w-10 h-10 text-red-600" />
-						<h1 className="text-4xl font-bold text-gray-900">
+						<Plane className="w-10 h-10 text-red-400" />
+						<h1 className="text-4xl font-bold text-gray-100">
 							Japan Trip Planner
 						</h1>
 					</div>
-					<p className="text-gray-600 ml-13">
+					<p className="text-gray-400 ml-13">
 						Plan your perfect journey to the Land of the Rising Sun
 					</p>
 				</div>
@@ -97,7 +107,7 @@ const Home = () => {
 				<Card className="mb-6">
 					<CardHeader className="pb-0">
 						<div className="flex items-center justify-between">
-							<div className="flex gap-1 border-b border-gray-200 w-full">
+							<div className="flex gap-1 border-b border-gray-700 w-full">
 								{tabs.map((tab) => (
 									<button
 										type="button"
@@ -105,8 +115,8 @@ const Home = () => {
 										onClick={() => setActiveTab(tab.id)}
 										className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors border-b-2 ${
 											activeTab === tab.id
-												? "border-red-500 text-red-600"
-												: "border-transparent text-gray-600 hover:text-red-500"
+												? "border-red-400 text-red-400"
+												: "border-transparent text-gray-400 hover:text-red-400"
 										}`}
 									>
 										<tab.icon className="w-4 h-4" />

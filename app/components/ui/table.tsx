@@ -2,25 +2,24 @@ import type { ReactNode } from "react";
 
 interface TableProps {
 	children: ReactNode;
+	className?: string;
 }
 
-export const Table = ({ children }: TableProps) => {
-	return (
-		<div className="overflow-x-auto">
-			<table className="w-full">{children}</table>
-		</div>
-	);
-};
+export const Table = ({ className = "", children }: TableProps) => (
+	<div className="overflow-x-auto rounded-lg border border-gray-700">
+		<table className={`w-full ${className}`}>{children}</table>
+	</div>
+);
 
-export const TableHeader = ({ children }: TableProps) => {
-	return (
-		<thead className="bg-gray-50 border-b border-gray-200">{children}</thead>
-	);
-};
+export const TableHeader = ({ className = "", children }: TableProps) => (
+	<thead className={`bg-gray-800 border-b border-gray-700 ${className}`}>
+		{children}
+	</thead>
+);
 
-export const TableBody = ({ children }: TableProps) => {
-	return <tbody className="divide-y divide-gray-200">{children}</tbody>;
-};
+export const TableBody = ({ className = "", children }: TableProps) => (
+	<tbody className={`divide-y divide-gray-700 ${className}`}>{children}</tbody>
+);
 
 interface TableRowProps {
 	children: ReactNode;
@@ -29,7 +28,7 @@ interface TableRowProps {
 
 export const TableRow = ({ children, className = "" }: TableRowProps) => {
 	return (
-		<tr className={`hover:bg-gray-50 transition-colors ${className}`}>
+		<tr className={`hover:bg-gray-700/50 transition-colors ${className}`}>
 			{children}
 		</tr>
 	);
@@ -48,14 +47,23 @@ export const TableCell = ({
 	header = false,
 	colSpan,
 }: TableCellProps) => {
-	const Component = header ? "th" : "td";
-	const baseStyles = header
-		? "px-4 py-3 text-left text-sm font-medium text-gray-700"
-		: "px-4 py-3 text-sm text-gray-900";
-
 	return (
-		<Component className={`${baseStyles} ${className}`} colSpan={colSpan}>
-			{children}
-		</Component>
+		<>
+			{header ? (
+				<th
+					colSpan={colSpan}
+					className={`px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider ${className}`}
+				>
+					{children}
+				</th>
+			) : (
+				<td
+					colSpan={colSpan}
+					className={`px-4 py-3 text-sm text-gray-300 ${className}`}
+				>
+					{children}
+				</td>
+			)}
+		</>
 	);
 };

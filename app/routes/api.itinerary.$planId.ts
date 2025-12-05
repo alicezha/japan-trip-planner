@@ -9,13 +9,19 @@ export async function loader({ params }: { params: { planId: string } }) {
 
 	const items = await prisma.itineraryItem.findMany({
 		where: { planId },
-		orderBy: { date: "asc" },
+		orderBy: { datetime: "asc" },
 	});
 
 	return Response.json(items);
 }
 
-export async function action({ request, params }: { request: Request; params: { planId: string } }) {
+export async function action({
+	request,
+	params,
+}: {
+	request: Request;
+	params: { planId: string };
+}) {
 	const planId = params.planId;
 	const method = request.method;
 
@@ -29,7 +35,7 @@ export async function action({ request, params }: { request: Request; params: { 
 			data: {
 				...data,
 				planId,
-				date: new Date(data.date),
+				datetime: new Date(data.datetime),
 			},
 		});
 		return Response.json(item, { status: 201 });
@@ -47,7 +53,7 @@ export async function action({ request, params }: { request: Request; params: { 
 			where: { id },
 			data: {
 				...updateData,
-				...(updateData.date && { date: new Date(updateData.date) }),
+				...(updateData.datetime && { datetime: new Date(updateData.datetime) }),
 			},
 		});
 		return Response.json(item);

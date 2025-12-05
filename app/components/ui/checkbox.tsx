@@ -13,10 +13,10 @@ export const Checkbox = ({
 		<label className="flex items-center gap-2 cursor-pointer">
 			<input
 				type="checkbox"
-				className={`w-5 h-5 text-red-500 border-gray-300 rounded focus:ring-red-500 focus:ring-2 cursor-pointer ${className}`}
+				className={`w-5 h-5 text-red-500 bg-gray-700 border-gray-600 rounded focus:ring-red-500 focus:ring-2 cursor-pointer ${className}`}
 				{...props}
 			/>
-			{label && <span className="text-sm text-gray-700">{label}</span>}
+			{label && <span className="text-sm text-gray-300">{label}</span>}
 		</label>
 	);
 };

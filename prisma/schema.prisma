@@ -24,7 +24,7 @@ enum PackingCategory {
 
 model ItineraryItem {
   id          String   @id @default(cuid())
-  date        DateTime
+  datetime    DateTime
   city        String
   activity    String
   description String?

@@ -5,15 +5,13 @@ interface CardProps {
 	className?: string;
 }
 
-export const Card = ({ children, className = "" }: CardProps) => {
-	return (
-		<div
-			className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}
-		>
-			{children}
-		</div>
-	);
-};
+export const Card = ({ className = "", children }: CardProps) => (
+	<div
+		className={`bg-gray-800 border border-gray-700 rounded-lg shadow-sm ${className}`}
+	>
+		{children}
+	</div>
+);
 
 export const CardHeader = ({ children, className = "" }: CardProps) => {
 	return (

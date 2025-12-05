@@ -17,11 +17,12 @@ export const Button = ({
 
 	const variants = {
 		primary:
-			"bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 shadow-sm",
+			"bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 disabled:bg-gray-700 disabled:text-gray-500",
 		secondary:
-			"bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-500",
-		danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
-		ghost: "bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500",
+			"bg-gray-700 text-gray-100 hover:bg-gray-600 focus:ring-gray-500 disabled:bg-gray-800 disabled:text-gray-600",
+		danger:
+			"bg-red-700 text-white hover:bg-red-800 focus:ring-red-600 disabled:bg-gray-700 disabled:text-gray-500",
+		ghost: "bg-transparent text-gray-300 hover:bg-gray-700 focus:ring-gray-500",
 	};
 
 	const sizes = {

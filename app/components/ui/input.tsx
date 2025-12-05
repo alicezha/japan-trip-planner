@@ -13,7 +13,7 @@ export const Input = ({
 	...props
 }: InputProps) => {
 	const inputId =
-		id || props.name || `input-${Math.random().toString(36).substr(2, 9)}`;
+		id || props.name || `input-${Math.random().toString(36).slice(2, 9)}`;
 	return (
 		<div className="w-full">
 			{label && (
@@ -26,8 +26,11 @@ export const Input = ({
 			)}
 			<input
 				id={inputId}
-				className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-					error ? "border-red-500" : "border-gray-300"
+				style={{
+					colorScheme: "dark",
+				}}
+				className={`px-3 py-2 border rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+					error ? "border-red-500" : "border-gray-600"
 				} ${className}`}
 				{...props}
 			/>

@@ -25,7 +25,7 @@ export const ItineraryList = ({ items, planId }: ItineraryListProps) => {
 				city: "",
 				activity: "",
 				description: "",
-				date: new Date().toISOString(),
+				datetime: new Date().toISOString(),
 			},
 			{
 				method: "POST",
@@ -62,7 +62,9 @@ export const ItineraryList = ({ items, planId }: ItineraryListProps) => {
 	return (
 		<div>
 			<div className="flex justify-between items-center mb-4">
-				<h2 className="text-xl font-semibold text-gray-900">Itinerary</h2>
+				<h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+					Itinerary
+				</h2>
 				<Button onClick={handleAdd} size="sm">
 					<Plus className="w-4 h-4" />
 					Add Item
@@ -84,10 +86,14 @@ export const ItineraryList = ({ items, planId }: ItineraryListProps) => {
 						<TableRow key={item.id}>
 							<TableCell>
 								<Input
-									type="date"
-									defaultValue={new Date(item.date).toISOString().split("T")[0]}
-									onBlur={(e) => handleUpdate(item.id, "date", e.target.value)}
-									className="min-w-[140px]"
+									type="datetime-local"
+									defaultValue={new Date(item.datetime)
+										.toISOString()
+										.slice(0, 16)}
+									onBlur={(e) =>
+										handleUpdate(item.id, "datetime", e.target.value)
+									}
+									className="min-w-[180px] w-full"
 								/>
 							</TableCell>
 							<TableCell>

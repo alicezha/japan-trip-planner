@@ -15,7 +15,13 @@ export async function loader({ params }: { params: { planId: string } }) {
 	return Response.json(items);
 }
 
-export async function action({ request, params }: { request: Request; params: { planId: string } }) {
+export async function action({
+	request,
+	params,
+}: {
+	request: Request;
+	params: { planId: string };
+}) {
 	const planId = params.planId;
 	const method = request.method;
 

@@ -75,7 +75,9 @@ export const BudgetList = ({ items, planId }: BudgetListProps) => {
 	return (
 		<div>
 			<div className="flex justify-between items-center mb-4">
-				<h2 className="text-xl font-semibold text-gray-900">Budget</h2>
+				<h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+					Budget
+				</h2>
 				<Button onClick={handleAdd} size="sm">
 					<Plus className="w-4 h-4" />
 					Add Item
@@ -83,20 +85,24 @@ export const BudgetList = ({ items, planId }: BudgetListProps) => {
 			</div>
 
 			<div className="grid grid-cols-3 gap-4 mb-6">
-				<div className="bg-blue-50 p-4 rounded-lg">
-					<p className="text-sm text-gray-600 mb-1">Estimated</p>
+				<div className="bg-gray-100 dark:bg-gray-800 dark:border-gray-700 border-1 p-4 rounded-lg">
+					<p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+						Estimated
+					</p>
 					<p className="text-2xl font-bold text-blue-600">
 						${totalEstimated.toFixed(2)}
 					</p>
 				</div>
-				<div className="bg-green-50 p-4 rounded-lg">
-					<p className="text-sm text-gray-600 mb-1">Actual</p>
+				<div className="bg-gray-100 dark:bg-gray-800 dark:border-gray-700 border-1 p-4 rounded-lg">
+					<p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+						Actual
+					</p>
 					<p className="text-2xl font-bold text-green-600">
 						${totalActual.toFixed(2)}
 					</p>
 				</div>
 				<div
-					className={`p-4 rounded-lg ${difference > 0 ? "bg-red-50" : "bg-green-50"}`}
+					className={`p-4 rounded-lg dark:border-gray-700 border-1 ${difference > 0 ? "bg-red-200/80" : "bg-green-200/80"}`}
 				>
 					<p className="text-sm text-gray-600 mb-1">Difference</p>
 					<p
@@ -127,7 +133,7 @@ export const BudgetList = ({ items, planId }: BudgetListProps) => {
 									onChange={(e) =>
 										handleUpdate(item.id, "category", e.target.value)
 									}
-									className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+									className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
 								>
 									<option value="TRANSPORTATION">Transportation</option>
 									<option value="ACCOMMODATION">Accommodation</option>
