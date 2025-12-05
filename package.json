@@ -6,7 +6,10 @@
 		"build": "react-router build",
 		"dev": "react-router dev",
 		"start": "react-router-serve ./build/server/index.js",
-		"typecheck": "react-router typegen && tsc"
+		"typecheck": "react-router typegen && tsc",
+		"prisma:init": "prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script > prisma/migrations/0_init/migration.sql",
+		"prisma:init-resolve": "prisma migrate resolve --applied 0_init",
+		"prisma:generate": "prisma generate"
 	},
 	"dependencies": {
 		"@prisma/adapter-better-sqlite3": "^7.1.0",
@@ -15,6 +18,7 @@
 		"@react-router/serve": "7.10.1",
 		"dotenv": "^17.2.3",
 		"isbot": "^5.1.31",
+		"lucide-react": "^0.555.0",
 		"react": "^19.2.1",
 		"react-dom": "^19.2.1",
 		"react-router": "7.10.1"

@@ -9,3 +9,5 @@
 /prisma/generated/prisma
 
 /app/lib/prisma
+
+/app/lib/prisma
