@@ -9,7 +9,8 @@
 		"typecheck": "react-router typegen && tsc",
 		"prisma:init": "prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script > prisma/migrations/0_init/migration.sql",
 		"prisma:init-resolve": "prisma migrate resolve --applied 0_init",
-		"prisma:generate": "prisma generate"
+		"prisma:generate": "prisma generate",
+		"prisma:migrate": "prisma migrate dev"
 	},
 	"dependencies": {
 		"@prisma/adapter-better-sqlite3": "^7.1.0",
