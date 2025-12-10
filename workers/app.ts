@@ -1,25 +1,23 @@
-// @ts-expect-error - virtual module provided by React Router
-import * as build from "virtual:react-router/server-build";
-import { createRequestHandler } from "@react-router/cloudflare";
+import { createRequestHandler } from "react-router";
+
+declare module "react-router" {
+  export interface AppLoadContext {
+    cloudflare: {
+      env: Env;
+      ctx: ExecutionContext;
+    };
+  }
+}
+
+const requestHandler = createRequestHandler(
+  () => import("virtual:react-router/server-build"),
+  import.meta.env.MODE
+);
 
 export default {
-  async fetch(request: Request, env: any, ctx: ExecutionContext) {
-    try {
-      const handler = createRequestHandler(build, "production");
-
-      // Pass the loadContext with cloudflare properties
-      const response = await handler(request, {
-        cloudflare: {
-          env,
-          ctx,
-          cf: request.cf, // Add this - passes Cloudflare request properties
-        },
-      });
-
-      return response;
-    } catch (error) {
-      console.error("Worker error:", error);
-      return new Response("Internal Server Error", { status: 500 });
-    }
+  async fetch(request, env, ctx) {
+    return requestHandler(request, {
+      cloudflare: { env, ctx },
+    });
   },
-};
+} satisfies ExportedHandler<Env>;
