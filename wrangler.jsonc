@@ -3,7 +3,10 @@
 	"name": "trip-planner",
 	"compatibility_flags": ["nodejs_compat"],
 	"compatibility_date": "2025-04-04",
-	"main": "./workers/app.ts",
+	"main": "./build/server/index.js",
+	"assets": {
+		"directory": "./build/client"
+	},
 	"observability": {
 		"enabled": true
 	}
