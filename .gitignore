@@ -13,3 +13,5 @@
 /app/lib/prisma
 
 pnpm-workspace.yaml
+
+.wrangler

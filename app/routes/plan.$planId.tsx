@@ -3,8 +3,8 @@ import {
 	DollarSign,
 	Link2,
 	Package,
-	Play,
 	Plane,
+	Play,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { LoaderFunctionArgs } from "react-router";
