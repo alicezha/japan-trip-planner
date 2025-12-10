@@ -11,3 +11,5 @@
 /app/lib/prisma
 
 /app/lib/prisma
+
+pnpm-workspace.yaml
