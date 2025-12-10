@@ -1,18 +1,20 @@
-import { prisma } from "~/lib/db.server";
+import { createServerClient } from "~/lib/client";
 
 export async function loader({ params }: { params: { planId: string } }) {
+	const supabase = createServerClient();
 	const planId = params.planId;
 
 	if (!planId) {
 		return Response.json({ error: "Plan ID is required" }, { status: 400 });
 	}
 
-	const items = await prisma.packingItem.findMany({
-		where: { planId },
-		orderBy: { category: "asc" },
-	});
+	const { data: items } = await supabase
+		.from("PackingItem")
+		.select("*")
+		.eq("plan_id", planId)
+		.order("category", { ascending: true });
 
-	return Response.json(items);
+	return Response.json(items || []);
 }
 
 export async function action({
@@ -22,6 +24,7 @@ export async function action({
 	request: Request;
 	params: { planId: string };
 }) {
+	const supabase = createServerClient();
 	const planId = params.planId;
 	const method = request.method;
 
@@ -31,12 +34,15 @@ export async function action({
 
 	if (method === "POST") {
 		const data = await request.json();
-		const item = await prisma.packingItem.create({
-			data: {
+		const { data: item } = await supabase
+			.from("PackingItem")
+			.insert({
 				...data,
-				planId,
-			},
-		});
+				plan_id: planId,
+				updated_at: new Date().toISOString(),
+			})
+			.select()
+			.single();
 		return Response.json(item, { status: 201 });
 	}
 
@@ -48,10 +54,15 @@ export async function action({
 			return Response.json({ error: "Item ID is required" }, { status: 400 });
 		}
 
-		const item = await prisma.packingItem.update({
-			where: { id },
-			data: updateData,
-		});
+		const { data: item } = await supabase
+			.from("PackingItem")
+			.update({
+				...updateData,
+				updated_at: new Date().toISOString(),
+			})
+			.eq("id", id)
+			.select()
+			.single();
 		return Response.json(item);
 	}
 
@@ -63,9 +74,7 @@ export async function action({
 			return Response.json({ error: "Item ID is required" }, { status: 400 });
 		}
 
-		await prisma.packingItem.delete({
-			where: { id },
-		});
+		await supabase.from("PackingItem").delete().eq("id", id);
 		return Response.json({ success: true });
 	}
 

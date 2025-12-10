@@ -1,18 +1,20 @@
-import { prisma } from "~/lib/db.server";
+import { createServerClient } from "~/lib/client";
 
 export async function loader({ params }: { params: { planId: string } }) {
+	const supabase = createServerClient();
 	const planId = params.planId;
 
 	if (!planId) {
 		return Response.json({ error: "Plan ID is required" }, { status: 400 });
 	}
 
-	const items = await prisma.itineraryItem.findMany({
-		where: { planId },
-		orderBy: { datetime: "asc" },
-	});
+	const { data: items } = await supabase
+		.from("ItineraryItem")
+		.select("*")
+		.eq("plan_id", planId)
+		.order("created_at", { ascending: true });
 
-	return Response.json(items);
+	return Response.json(items || []);
 }
 
 export async function action({
@@ -22,6 +24,7 @@ export async function action({
 	request: Request;
 	params: { planId: string };
 }) {
+	const supabase = createServerClient();
 	const planId = params.planId;
 	const method = request.method;
 
@@ -31,13 +34,15 @@ export async function action({
 
 	if (method === "POST") {
 		const data = await request.json();
-		const item = await prisma.itineraryItem.create({
-			data: {
+		const { data: item } = await supabase
+			.from("ItineraryItem")
+			.insert({
 				...data,
-				planId,
-				datetime: new Date(data.datetime),
-			},
-		});
+				plan_id: planId,
+				updated_at: new Date().toISOString(),
+			})
+			.select()
+			.single();
 		return Response.json(item, { status: 201 });
 	}
 
@@ -49,13 +54,15 @@ export async function action({
 			return Response.json({ error: "Item ID is required" }, { status: 400 });
 		}
 
-		const item = await prisma.itineraryItem.update({
-			where: { id },
-			data: {
+		const { data: item } = await supabase
+			.from("ItineraryItem")
+			.update({
 				...updateData,
-				...(updateData.datetime && { datetime: new Date(updateData.datetime) }),
-			},
-		});
+				updated_at: new Date().toISOString(),
+			})
+			.eq("id", id)
+			.select()
+			.single();
 		return Response.json(item);
 	}
 
@@ -67,9 +74,7 @@ export async function action({
 			return Response.json({ error: "Item ID is required" }, { status: 400 });
 		}
 
-		await prisma.itineraryItem.delete({
-			where: { id },
-		});
+		await supabase.from("ItineraryItem").delete().eq("id", id);
 		return Response.json({ success: true });
 	}
 

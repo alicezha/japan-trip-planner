@@ -2,30 +2,28 @@ export const exportToCSV = (
 	data: Record<string, unknown>[],
 	filename: string,
 	columns: string[],
-): void => {
-	if (data.length === 0) {
-		alert("No data to export");
-		return;
-	}
+) => {
+	if (!data.length) return;
 
 	// Create CSV header
 	const header = columns.join(",");
 
 	// Create CSV rows
-	const rows = data.map((row) => {
-		return columns
+	const rows = data.map((item) =>
+		columns
 			.map((col) => {
-				const value = row[col];
-				// Handle values that might contain commas or quotes
-				if (value === null || value === undefined) return "";
-				const stringValue = String(value);
-				if (stringValue.includes(",") || stringValue.includes('"')) {
-					return `"${stringValue.replace(/"/g, '""')}"`;
+				const value = item[col];
+				// Handle values with commas or quotes
+				if (
+					typeof value === "string" &&
+					(value.includes(",") || value.includes('"'))
+				) {
+					return `"${value.replace(/"/g, '""')}"`;
 				}
-				return stringValue;
+				return value;
 			})
-			.join(",");
-	});
+			.join(","),
+	);
 
 	// Combine header and rows
 	const csv = [header, ...rows].join("\n");

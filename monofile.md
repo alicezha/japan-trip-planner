@@ -972,17 +972,17 @@ const JapanTripPlanner: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-screen bg-gradient-to-br from-red-50 to-pink-50 flex items-center justify-center">
+      <div className="w-full h-screen bg-linear-to-br from-red-50 to-pink-50 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-red-500" />
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-red-50 to-pink-50 p-6">
+    <div className="w-full min-h-screen bg-linear-to-br from-red-50 to-pink-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white p-6">
+          <div className="bg-linear-to-r from-red-500 to-pink-500 text-white p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Plane className="w-8 h-8" />

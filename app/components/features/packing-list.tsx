@@ -1,6 +1,7 @@
 import { Plus, Trash2 } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useFetcher } from "react-router";
-import type { PackingItem } from "~/lib/prisma/client";
+import type { Tables } from "~/lib/types/supabase";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
@@ -13,12 +14,22 @@ import {
 } from "../ui/table";
 
 interface PackingListProps {
-	items: PackingItem[];
+	items: Tables<"PackingItem">[];
 	planId: string;
+	onUpdate?: () => void;
 }
 
-export const PackingList = ({ items, planId }: PackingListProps) => {
+export const PackingList = ({ items, planId, onUpdate }: PackingListProps) => {
 	const fetcher = useFetcher();
+	const isLoading = fetcher.state !== "idle";
+	const prevStateRef = useRef(fetcher.state);
+
+	useEffect(() => {
+		if (prevStateRef.current !== "idle" && fetcher.state === "idle") {
+			onUpdate?.();
+		}
+		prevStateRef.current = fetcher.state;
+	}, [fetcher.state, onUpdate]);
 
 	const handleAdd = () => {
 		fetcher.submit(
@@ -58,27 +69,31 @@ export const PackingList = ({ items, planId }: PackingListProps) => {
 			);
 		}
 	};
-
 	const packedCount = items.filter((item) => item.packed).length;
 	const totalCount = items.length;
 	const percentage = totalCount > 0 ? (packedCount / totalCount) * 100 : 0;
 
 	return (
-		<div>
+		<div className="overflow-x-auto">
 			<div className="flex justify-between items-center mb-4">
-				<h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+				<h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
 					Packing List
 				</h2>
-				<Button onClick={handleAdd} size="sm">
-					<Plus className="w-4 h-4" />
+				<Button onClick={handleAdd} size="sm" disabled={isLoading}>
+					{isLoading ? (
+						<div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+					) : (
+						<Plus className="w-4 h-4" />
+					)}
 					Add Item
 				</Button>
-			</div>
-
-			<div className="mb-6 bg-gray-100 dark:bg-gray-800 dark:border-gray-700 border-1 p-4 rounded-lg">
+			</div>{" "}
+			<div className="mb-4 sm:mb-6 bg-gray-100 dark:bg-gray-800 dark:border-gray-700 border p-3 sm:p-4 rounded-lg">
 				<div className="flex justify-between items-center mb-2">
-					<p className="text-sm text-gray-600 dark:text-gray-400">Progress</p>
-					<p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+					<p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+						Progress
+					</p>
+					<p className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">
 						{packedCount} / {totalCount} items packed
 					</p>
 				</div>
@@ -92,7 +107,6 @@ export const PackingList = ({ items, planId }: PackingListProps) => {
 					{percentage.toFixed(0)}% complete
 				</p>
 			</div>
-
 			<Table>
 				<TableHeader>
 					<TableRow>

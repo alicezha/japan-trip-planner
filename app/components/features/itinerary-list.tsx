@@ -1,6 +1,7 @@
 import { Plus, Trash2 } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useFetcher } from "react-router";
-import type { ItineraryItem } from "~/lib/prisma/client";
+import type { Tables } from "~/lib/types/supabase";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
@@ -12,17 +13,33 @@ import {
 } from "../ui/table";
 
 interface ItineraryListProps {
-	items: ItineraryItem[];
+	items: Tables<"ItineraryItem">[];
 	planId: string;
+	onUpdate?: () => void;
 }
 
-export const ItineraryList = ({ items, planId }: ItineraryListProps) => {
+export const ItineraryList = ({
+	items,
+	planId,
+	onUpdate,
+}: ItineraryListProps) => {
 	const fetcher = useFetcher();
+	const isLoading = fetcher.state !== "idle";
+	const prevStateRef = useRef(fetcher.state);
+
+	useEffect(() => {
+		if (prevStateRef.current !== "idle" && fetcher.state === "idle") {
+			onUpdate?.();
+		}
+		prevStateRef.current = fetcher.state;
+	}, [fetcher.state, onUpdate]);
 
 	const handleAdd = () => {
 		fetcher.submit(
 			{
 				city: "",
+				country: "",
+				region: "",
 				activity: "",
 				description: "",
 				datetime: new Date().toISOString(),
@@ -58,15 +75,18 @@ export const ItineraryList = ({ items, planId }: ItineraryListProps) => {
 			);
 		}
 	};
-
 	return (
-		<div>
+		<div className="overflow-x-auto">
 			<div className="flex justify-between items-center mb-4">
-				<h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+				<h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
 					Itinerary
 				</h2>
-				<Button onClick={handleAdd} size="sm">
-					<Plus className="w-4 h-4" />
+				<Button onClick={handleAdd} size="sm" disabled={isLoading}>
+					{isLoading ? (
+						<div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+					) : (
+						<Plus className="w-4 h-4" />
+					)}
 					Add Item
 				</Button>
 			</div>
@@ -76,6 +96,8 @@ export const ItineraryList = ({ items, planId }: ItineraryListProps) => {
 					<TableRow>
 						<TableCell header>Date</TableCell>
 						<TableCell header>City</TableCell>
+						<TableCell header>Region</TableCell>
+						<TableCell header>Country</TableCell>
 						<TableCell header>Activity</TableCell>
 						<TableCell header>Description</TableCell>
 						<TableCell header>Actions</TableCell>
@@ -102,6 +124,26 @@ export const ItineraryList = ({ items, planId }: ItineraryListProps) => {
 									defaultValue={item.city}
 									onBlur={(e) => handleUpdate(item.id, "city", e.target.value)}
 									placeholder="City"
+								/>
+							</TableCell>
+							<TableCell>
+								<Input
+									type="text"
+									defaultValue={item.region}
+									onBlur={(e) =>
+										handleUpdate(item.id, "region", e.target.value)
+									}
+									placeholder="Region/State"
+								/>
+							</TableCell>
+							<TableCell>
+								<Input
+									type="text"
+									defaultValue={item.country}
+									onBlur={(e) =>
+										handleUpdate(item.id, "country", e.target.value)
+									}
+									placeholder="Country"
 								/>
 							</TableCell>
 							<TableCell>
@@ -137,7 +179,7 @@ export const ItineraryList = ({ items, planId }: ItineraryListProps) => {
 					))}
 					{items.length === 0 && (
 						<TableRow>
-							<TableCell className="text-center text-gray-500 py-8" colSpan={5}>
+							<TableCell className="text-center text-gray-500 py-8" colSpan={7}>
 								No itinerary items yet. Click "Add Item" to get started.
 							</TableCell>
 						</TableRow>
