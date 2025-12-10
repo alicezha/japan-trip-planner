@@ -4,6 +4,9 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"compatibility_date": "2025-04-04",
 	"main": "./workers/app.ts",
+	"vars": {
+		"VITE_SUPABASE_URL": "https://qfwrsvctmstjqekhsjyz.supabase.co"
+	},
 	"observability": {
 		"enabled": true
 	}
