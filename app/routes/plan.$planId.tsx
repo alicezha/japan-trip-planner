@@ -191,14 +191,28 @@ export default function PublicPlan() {
 							<BudgetList
 								items={budgetItems}
 								planId={planId}
-								onUpdate={() => {}}
+								onUpdate={() => {
+									supabase
+										.from("BudgetItem")
+										.select("*")
+										.eq("plan_id", planId)
+										.order("created_at", { ascending: true })
+										.then(({ data }) => setBudgetItems(data || []));
+								}}
 							/>
 						)}
 						{activeTab === "packing" && (
 							<PackingList
 								items={packingItems}
 								planId={planId}
-								onUpdate={() => {}}
+								onUpdate={() => {
+									supabase
+										.from("PackingItem")
+										.select("*")
+										.eq("plan_id", planId)
+										.order("category", { ascending: true })
+										.then(({ data }) => setPackingItems(data || []));
+								}}
 							/>
 						)}
 					</CardContent>

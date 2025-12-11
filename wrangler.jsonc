@@ -9,5 +9,11 @@
 	},
 	"observability": {
 		"enabled": true
-	}
+	},
+	"routes": [
+		{
+			"pattern": "trip.qinbeans.net",
+			"custom_domain": true
+		}
+	]
 }
