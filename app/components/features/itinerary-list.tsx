@@ -158,7 +158,7 @@ export const ItineraryList = ({
 							</TableCell>
 							<TableCell>
 								<Input
-									type="text"
+									type="textarea"
 									defaultValue={item.description || ""}
 									onBlur={(e) =>
 										handleUpdate(item.id, "description", e.target.value)

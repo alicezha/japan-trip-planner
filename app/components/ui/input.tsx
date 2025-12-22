@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from "react";
+import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
@@ -10,6 +10,7 @@ export const Input = ({
 	error,
 	className = "",
 	id,
+	type,
 	...props
 }: InputProps) => {
 	const inputId =
@@ -24,16 +25,31 @@ export const Input = ({
 					{label}
 				</label>
 			)}
-			<input
-				id={inputId}
-				style={{
-					colorScheme: "dark",
-				}}
-				className={`px-3 py-2 border rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-					error ? "border-red-500" : "border-gray-600"
-				} ${className}`}
-				{...props}
-			/>
+			{type === "textarea" ? (
+				<textarea
+					id={inputId}
+					style={{
+						colorScheme: "dark",
+					}}
+					rows={1}
+					className={`px-3 py-2 border rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+						error ? "border-red-500" : "border-gray-600"
+					} ${className}`}
+					{...(props as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+				/>
+			) : (
+				<input
+					id={inputId}
+					style={{
+						colorScheme: "dark",
+					}}
+					className={`px-3 py-2 border rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+						error ? "border-red-500" : "border-gray-600"
+					} ${className}`}
+					type={type}
+					{...props}
+				/>
+			)}
 			{error && <p className="mt-1 text-sm text-red-600">{error}</p>}
 		</div>
 	);
