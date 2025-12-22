@@ -4,6 +4,7 @@ import type { LoaderFunctionArgs } from "react-router";
 import { useFetcher, useLoaderData, useNavigate } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Description } from "~/components/ui/description";
 import { supabase } from "~/lib/client";
 import type { Tables } from "~/lib/types/supabase";
 
@@ -348,9 +349,7 @@ export default function Experience() {
 																</span>
 															</div>
 															{item.description && (
-																<p className="text-sm text-gray-400 mt-2">
-																	{item.description}
-																</p>
+																<Description content={item.description} />
 															)}
 														</div>
 														<span className="text-sm text-gray-500">
