@@ -104,20 +104,26 @@ export const ItineraryList = ({
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{items.map((item) => (
-						<TableRow key={item.id}>
-							<TableCell>
-								<Input
-									type="datetime-local"
-									defaultValue={new Date(item.datetime)
-										.toISOString()
-										.slice(0, 16)}
-									onBlur={(e) =>
-										handleUpdate(item.id, "datetime", e.target.value)
-									}
-									className="min-w-[180px] w-full"
-								/>
-							</TableCell>
+					{items.map((item) => {
+						// Convert UTC to local time for datetime-local input
+						const date = new Date(item.datetime);
+						const offset = date.getTimezoneOffset() * 60000;
+						const localDatetime = new Date(date.getTime() - offset)
+							.toISOString()
+							.slice(0, 16);
+
+						return (
+							<TableRow key={item.id}>
+								<TableCell>
+									<Input
+										type="datetime-local"
+										defaultValue={localDatetime}
+										onBlur={(e) =>
+											handleUpdate(item.id, "datetime", new Date(e.target.value).toISOString())
+										}
+										className="min-w-[180px] w-full"
+									/>
+								</TableCell>
 							<TableCell>
 								<Input
 									type="text"
@@ -176,7 +182,8 @@ export const ItineraryList = ({
 								</Button>
 							</TableCell>
 						</TableRow>
-					))}
+					);
+					})}
 					{items.length === 0 && (
 						<TableRow>
 							<TableCell className="text-center text-gray-500 py-8" colSpan={7}>
